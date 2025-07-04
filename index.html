@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>EasyVision Bot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #f7f7f7;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 40px;
+    }
+
+    .button {
+      display: block;
+      width: 90%;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 25px;
+      font-size: 36px;
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .button:active {
+      background-color: #005ea1;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧭 Easy Menu</h1>
+
+  <button class="button" onclick="sendData('HELP')">🆘 HELP</button>
+  <button class="button" onclick="sendData('LOCATION')">📍 Send My Location</button>
+  <button class="button" onclick="sendData('TIME')">🕒 What Time Is It?</button>
+
+  <script>
+    function sendData(message) {
+      if (window.Telegram.WebApp) {
+        Telegram.WebApp.sendData(message);
+      } else {
+        alert("Not running in Telegram Web App.");
+      }
+    }
+
+    // Optional: make the Web App fullscreen
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+  </script>
+</body>
+</html>
