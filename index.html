@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>EasyVision Bot</title>
+  <title>Apply Leave</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -14,20 +14,42 @@
 
     h1 {
       font-size: 36px;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-size: 20px;
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    input, select {
+      font-size: 20px;
+      padding: 10px;
+      margin-top: 5px;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+
+    .radio-group {
+      text-align: left;
+      max-width: 400px;
+      margin: 10px auto;
     }
 
     .button {
       display: block;
       width: 90%;
-      max-width: 500px;
-      margin: 20px auto;
-      padding: 25px;
-      font-size: 36px;
+      max-width: 400px;
+      margin: 30px auto;
+      padding: 20px;
+      font-size: 28px;
       background-color: #0078d4;
       color: white;
       border: none;
-      border-radius: 20px;
+      border-radius: 15px;
       cursor: pointer;
     }
 
@@ -37,24 +59,68 @@
   </style>
 </head>
 <body>
-  <h1>🧭 Easy Menu</h1>
+  <h1>📝 Apply for Leave</h1>
 
-  <button class="button" onclick="sendData('HELP')">🆘 HELP</button>
-  <button class="button" onclick="sendData('LOCATION')">📍 Send My Location</button>
-  <button class="button" onclick="sendData('TIME')">🕒 What Time Is It?</button>
+  <label for="name">👤 Your Name:</label>
+  <input type="text" id="name" placeholder="Enter your name">
+
+  <label for="start">📅 Start Date:</label>
+  <input type="date" id="start">
+
+  <label>🕒 Duration:</label>
+  <div class="radio-group">
+    <label><input type="radio" name="duration" value="Full Day" checked> Full Day</label>
+    <label><input type="radio" name="duration" value="Half Day"> Half Day</label>
+    <label><input type="radio" name="duration" value="Custom"> Custom</label>
+  </div>
+
+  <label for="type">📂 Type of Leave:</label>
+  <select id="type">
+    <option value="Sick Leave">Sick Leave</option>
+    <option value="Vacation">Vacation</option>
+    <option value="Personal">Personal</option>
+    <option value="Unpaid Leave">Unpaid Leave</option>
+  </select>
+
+  <button class="button" onclick="submitLeave()">📤 Submit Leave</button>
 
   <script>
-    function sendData(message) {
-      if (window.Telegram.WebApp) {
-        Telegram.WebApp.sendData(message);
-      } else {
-        alert("Not running in Telegram Web App.");
-      }
-    }
-
-    // Optional: make the Web App fullscreen
     Telegram.WebApp.ready();
     Telegram.WebApp.expand();
+
+    function submitLeave() {
+  const name = document.getElementById('name').value.trim();
+  const startDate = document.getElementById('start').value;
+  const type = document.getElementById('type').value;
+  const duration = document.querySelector('input[name="duration"]:checked').value;
+  const reason = document.getElementById('reason').value.trim();
+
+  if (!name || !startDate || !reason) {
+    alert("Please fill in your name, start date, and reason.");
+    return;
+  }
+
+  const leaveData = {
+    name,
+    startDate,
+    type,
+    duration,
+    reason
+  };
+
+  if (window.Telegram.WebApp) {
+    Telegram.WebApp.sendData(JSON.stringify(leaveData));
+
+    // OPTIONAL: Short delay before closing (feels smoother)
+    setTimeout(() => {
+      Telegram.WebApp.close();
+    }, 500);
+  } else {
+    alert("Not running inside Telegram Web App.");
+  }
+}
+
+
   </script>
 </body>
 </html>
